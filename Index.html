@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>GLN Choice Filling Support Center</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    :root {
+      --primary: #667eea;
+      --secondary: #764ba2;
+      --accent: #f093fb;
+      --success: #11998e;
+      --warning: #f5576c;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --gradient-1: linear-gradient(135deg, #667eea, #764ba2);
+      --gradient-2: linear-gradient(135deg, #4facfe, #00f2fe);
+      --gradient-3: linear-gradient(135deg, #11998e, #38ef7d);
+      --gradient-4: linear-gradient(135deg, #f093fb, #f5576c);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: #0f0f1a;
+      color: #e0e0e0;
+    }
+
+    body.dark .bg-light { background-color: #1a1a2e !important; }
+    body.dark .card { background-color: #1e1e36; border-color: #2a2a4a; color: #e0e0e0; }
+    body.dark .navbar { background: #0f0f1a !important; }
+    body.dark .modal-content { background-color: #1e1e36; color: #e0e0e0; border-color: #2a2a4a; }
+    body.dark .form-control, body.dark .form-select {
+      background-color: #2a2a4a;
+      border-color: #3a3a5a;
+      color: #e0e0e0;
+    }
+    body.dark .form-control:focus, body.dark .form-select:focus {
+      background-color: #2a2a4a;
+      color: #e0e0e0;
+    }
+    body.dark .list-group-item { background-color: #1e1e36; color: #e0e0e0; border-color: #2a2a4a; }
+    body.dark .table { color: #e0e0e0; }
+    body.dark .table-striped > tbody > tr:nth-of-type(odd) { background-color: rgba(255,255,255,0.03); }
+    body.dark .accordion-button { background-color: #1e1e36; color: #e0e0e0; }
+    body.dark .accordion-button:not(.collapsed) { background-color: #2a2a4a; color: #fff; }
+    body.dark .accordion-item { border-color: #2a2a4a; }
+    body.dark .footer { background-color: #0a0a15 !important; }
+    body.dark .text-muted { color: #999 !important; }
+    body.dark .counter-card { background: linear-gradient(135deg, #1a1a3e, #2a2a5e) !important; }
+
+    .navbar {
+      background: var(--gradient-1);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+
+    .navbar.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+
+    .hero-section {
+      background: var(--gradient-1);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 100px 0 80px;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+      animation: heroGlow 15s ease-in-out infinite;
+    }
+
+    @keyframes heroGlow {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-5%, -5%); }
+    }
+
+    .hero-content { position: relative; z-index: 2; }
+    .hero-title { font-size: 3rem; font-weight: 800; color: #fff; line-height: 1.2; }
+    .hero-subtitle { font-size: 1.3rem; color: rgba(255,255,255,0.9); font-weight: 300; }
+    .hero-btn { padding: 14px 40px; border-radius: 50px; font-weight: 600; font-size: 1.05rem; transition: all 0.3s; border: none; }
+    .hero-btn-primary { background: #fff; color: var(--primary); }
+    .hero-btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .hero-btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); }
+    .hero-btn-outline:hover { background: rgba(255,255,255,0.15); border-color: #fff; transform: translateY(-3px); }
+
+    .hero-wave { position: absolute; bottom: -2px; left: 0; width: 100%; z-index: 3; }
+
+    .section-padding { padding: 80px 0; }
+    .section-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 15px; }
+    .section-subtitle { font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto 50px; }
+    body.dark .section-subtitle { color: #aaa; }
+
+    .service-card {
+      border-radius: 20px;
+      border: none;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      transition: all 0.4s;
+      overflow: hidden;
+      cursor: pointer;
+      height: 100%;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .service-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #fff;
+      margin: 0 auto 20px;
+    }
+
+    .service-icon.eng { background: var(--gradient-1); }
+    .service-icon.med { background: var(--gradient-2); }
+    .service-icon.ayu { background: var(--gradient-3); }
+
+    .form-section {
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    }
+
+    body.dark .form-section { background: linear-gradient(135deg, #0f0f1a, #1a1a3e); }
+
+    .form-container {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      padding: 40px;
+    }
+
+    body.dark .form-container { background: rgba(30,30,54,0.95); }
+
+    .form-label { font-weight: 600; color: #444; margin-bottom: 6px; }
+    body.dark .form-label { color: #ccc; }
+
+    .form-control, .form-select {
+      border-radius: 12px;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.15);
+    }
+
+    .submit-btn {
+      background: var(--gradient-1);
+      border: none;
+      border-radius: 50px;
+      padding: 14px 40px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+      width: 100%;
+    }
+
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(102,126,234,0.4); }
+
+    .counter-card {
+      background: var(--gradient-1);
+      border-radius: 20px;
+      border: none;
+      color: #fff;
+      padding: 25px;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .counter-card:hover { transform: translateY(-5px); }
+
+    .counter-number { font-size: 2.5rem; font-weight: 800; margin: 10px 0 5px; }
+    .counter-label { font-size: 0.9rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+
+    .floating-wa {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 999;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #25D366;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 5px 20px rgba(37,211,102,0.4);
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .floating-wa:hover { transform: scale(1.1); color: #fff; }
+
+    .theme-toggle {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.6); }
+
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+
+    .toast-custom {
+      min-width: 300px;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 10px;
+      color: #fff;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideInRight 0.4s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .toast-success { background: var(--gradient-3); }
+    .toast-error { background: var(--gradient-4); }
+    .toast-info { background: var(--gradient-2); }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    }
+
+    .loading-overlay.active { display: flex; }
+
+    .spinner-container {
+      text-align: center;
+      color: #fff;
+    }
+
+    .spinner-container .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-badge {
+      padding: 5px 15px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .lead-table { font-size: 0.9rem; }
+    .lead-table th { white-space: nowrap; }
+
+    .faq-section { background: var(--light); }
+    body.dark .faq-section { background: #0f0f1a; }
+
+    .accordion-button:not(.collapsed) {
+      background: var(--gradient-1);
+      color: #fff;
+      box-shadow: none;
+    }
+
+    .progress-thin { height: 8px; border-radius: 4px; }
+
+    .footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.8);
+      padding: 30px 0;
+    }
+
+    .badge-hot { background: #f5576c; }
+    .badge-warm { background: #f093fb; }
+    .badge-cold { background: #4facfe; }
+
+    .nav-link-custom {
+      color: rgba(255,255,255,0.85) !important;
+      font-weight: 500;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .nav-link-custom:hover { color: #fff !important; }
+    .nav-link-custom::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: #fff;
+      transition: width 0.3s;
+    }
+
+    .nav-link-custom:hover::after { width: 70%; }
+    .nav-link-custom.active::after { width: 70%; }
+
+    .dashboard-card {
+      border-radius: 16px;
+      border: none;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+      transition: all 0.3s;
+    }
+
+    .dashboard-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .section-title { font-size: 1.6rem; }
+      .form-container { padding: 20px; }
+      .counter-number { font-size: 1.8rem; }
+      .navbar-brand { font-size: 0.9rem; }
+      .floating-wa { width: 50px; height: 50px; font-size: 24px; bottom: 20px; right: 20px; }
+    }
+
+    .gln-logo {
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -0.5px;
+    }
+
+    .gln-logo span { color: #ffd700; }
+
+    .conditional-fields { transition: all 0.4s ease; }
+
+    .tagline-text {
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    select optgroup { font-weight: 600; color: var(--primary); }
+  </style>
+</head>
+<body>
+  <noscript>
+    <div style="padding:40px;text-align:center;font-family:sans-serif;">
+      <h2>GLN Choice Filling Support Center</h2>
+      <p>JavaScript is required. Please enable JavaScript and reload.</p>
+    </div>
+  </noscript>
+  <div id="app-fallback" style="display:none;padding:40px;text-align:center;font-family:sans-serif;">
+    <h2>GLN Choice Filling Support Center</h2>
+    <p>Page is loading...</p>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <p class="mb-0 fw-bold">Processing...</p>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+    <div class="container">
+      <a class="navbar-brand gln-logo" href="#" onclick="showPage('home')">
+        <i class="fas fa-graduation-cap me-2"></i>GLN <span>Choice Fill</span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+          <li class="nav-item"><a class="nav-link nav-link-custom active" href="#" onclick="showPage('home')" data-page="home"><i class="fas fa-home me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="#" onclick="showPage('services')" data-page="services"><i class="fas fa-briefcase me-1"></i>Services</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="#" onclick="showPage('form')" data-page="form"><i class="fas fa-edit me-1"></i>Apply Now</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="#" onclick="showPage('dashboard')" data-page="dashboard"><i class="fas fa-chart-bar me-1"></i>Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-custom" href="#" onclick="showPage('faq')" data-page="faq"><i class="fas fa-question-circle me-1"></i>FAQ</a></li>
+          <li class="nav-item ms-lg-2">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+              <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE: HOME ===== -->
+  <div class="page-section active" id="page-home">
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container hero-content">
+        <div class="row align-items-center">
+          <div class="col-lg-7" data-aos="fade-right">
+            <p class="tagline-text text-white mb-3"><i class="fas fa-chevron-right me-2"></i>Rank Se Right Choice Order Tak Complete Counselling Support</p>
+            <h1 class="hero-title mb-4 animate__animated animate__fadeInUp">Personalized Choice Filling Support</h1>
+            <p class="hero-subtitle mb-4 animate__animated animate__fadeInUp animate__delay-1s">Engineering · Medical · AYUSH Counselling Guidance</p>
+            <div class="d-flex flex-wrap gap-3 animate__animated animate__fadeInUp animate__delay-2s">
+              <button class="hero-btn hero-btn-primary" onclick="showPage('form')">
+                <i class="fas fa-chart-line me-2"></i>Get Free Analysis
+              </button>
+              <a class="hero-btn hero-btn-outline" href="https://wa.me/919278110022" target="_blank">
+                <i class="fab fa-whatsapp me-2"></i>WhatsApp Now
+              </a>
+            </div>
+            <div class="row mt-5 g-3">
+              <div class="col-4">
+                <div class="text-center text-white">
+                  <h3 class="fw-bold mb-0 counter-number" style="font-size:1.8rem;" id="totalLeadsHero">0</h3>
+                  <small>Total Leads</small>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center text-white">
+                  <h3 class="fw-bold mb-0" style="font-size:1.8rem;" id="hotLeadsHero">0</h3>
+                  <small>Hot Leads</small>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center text-white">
+                  <h3 class="fw-bold mb-0" style="font-size:1.8rem;" id="counsellorsHero">3</h3>
+                  <small>Expert Teams</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5 text-center d-none d-lg-block" data-aos="fade-left">
+            <div style="background:rgba(255,255,255,0.1);border-radius:30px;padding:40px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);">
+              <i class="fas fa-university" style="font-size:5rem;color:rgba(255,255,255,0.6);margin-bottom:20px;"></i>
+              <h4 class="text-white">Trusted by Thousands</h4>
+              <p style="color:rgba(255,255,255,0.7);">Expert counselling for Engineering, Medical & AYUSH admissions across India.</p>
+              <div class="d-flex justify-content-center gap-4 mt-3">
+                <div><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <svg class="hero-wave" viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path fill="var(--bs-body-bg, #fff)" d="M0,40 C360,100 1080,0 1440,60 L1440,100 L0,100 Z"></path>
+      </svg>
+    </section>
+
+    <!-- Quick Stats -->
+    <section class="section-padding" style="padding:60px 0;">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-3 col-6">
+            <div class="counter-card" style="background:var(--gradient-1);">
+              <i class="fas fa-users fa-2x mb-2" style="opacity:0.8;"></i>
+              <div class="counter-number" id="statTotalLeads">0</div>
+              <div class="counter-label">Total Leads</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="counter-card" style="background:var(--gradient-2);">
+              <i class="fas fa-calendar-day fa-2x mb-2" style="opacity:0.8;"></i>
+              <div class="counter-number" id="statTodayLeads">0</div>
+              <div class="counter-label">Today's Leads</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="counter-card" style="background:var(--gradient-3);">
+              <i class="fas fa-fire fa-2x mb-2" style="opacity:0.8;"></i>
+              <div class="counter-number" id="statHotLeads">0</div>
+              <div class="counter-label">Hot Leads</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="counter-card" style="background:var(--gradient-4);">
+              <i class="fas fa-check-circle fa-2x mb-2" style="opacity:0.8;"></i>
+              <div class="counter-number" id="statConverted">0</div>
+              <div class="counter-label">Converted</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Preview -->
+    <section class="section-padding bg-light">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">Our Counselling Services</h2>
+          <p class="section-subtitle">Comprehensive guidance for every stream</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card service-card text-center p-4" onclick="showPage('form')">
+              <div class="service-icon eng mx-auto"><i class="fas fa-cogs"></i></div>
+              <h4 class="fw-bold">Engineering Counselling</h4>
+              <p class="text-muted">JEE Main, Advanced, BITSAT, state-level counselling guidance for CSE, ECE, and more.</p>
+              <span class="badge bg-primary rounded-pill px-3 py-2 mt-2">JoSAA · CSAB · UPTAC</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card service-card text-center p-4" onclick="showPage('form')">
+              <div class="service-icon med mx-auto"><i class="fas fa-stethoscope"></i></div>
+              <h4 class="fw-bold">Medical Counselling</h4>
+              <p class="text-muted">NEET UG counselling for MBBS, BDS, AYUSH, and nursing admissions through MCC & state.</p>
+              <span class="badge bg-info rounded-pill px-3 py-2 mt-2">MCC AIQ · State</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card service-card text-center p-4" onclick="showPage('form')">
+              <div class="service-icon ayu mx-auto"><i class="fas fa-leaf"></i></div>
+              <h4 class="fw-bold">AYUSH Counselling</h4>
+              <p class="text-muted">BAMS, BHMS, BUMS, BSMS counselling through AACCC and state counselling boards.</p>
+              <span class="badge bg-success rounded-pill px-3 py-2 mt-2">AACCC · State</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Us -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">Why Choose GLN?</h2>
+          <p class="section-subtitle">We provide end-to-end counselling support</p>
+        </div>
+        <div class="row g-4 text-center">
+          <div class="col-md-3 col-6">
+            <div class="p-3">
+              <div style="width:70px;height:70px;border-radius:50%;background:var(--gradient-1);display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:1.8rem;color:#fff;">
+                <i class="fas fa-robot"></i>
+              </div>
+              <h6 class="fw-bold">AI-Powered Analysis</h6>
+              <small class="text-muted">Smart rank & preference analysis</small>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="p-3">
+              <div style="width:70px;height:70px;border-radius:50%;background:var(--gradient-2);display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:1.8rem;color:#fff;">
+                <i class="fas fa-file-pdf"></i>
+              </div>
+              <h6 class="fw-bold">Personalized Report</h6>
+              <small class="text-muted">Custom choice order PDF</small>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="p-3">
+              <div style="width:70px;height:70px;border-radius:50%;background:var(--gradient-3);display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:1.8rem;color:#fff;">
+                <i class="fas fa-headset"></i>
+              </div>
+              <h6 class="fw-bold">1-on-1 Support</h6>
+              <small class="text-muted">Dedicated counsellor assigned</small>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="p-3">
+              <div style="width:70px;height:70px;border-radius:50%;background:var(--gradient-4);display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:1.8rem;color:#fff;">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <h6 class="fw-bold">Fast Turnaround</h6>
+              <small class="text-muted">Report within 24-48 hours</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="background:var(--gradient-1);padding:60px 0;text-align:center;color:#fff;">
+      <div class="container">
+        <h2 class="fw-bold mb-3">Ready to Secure Your Dream College?</h2>
+        <p class="mb-4" style="font-size:1.2rem;opacity:0.9;">Submit your profile and get a personalized choice filling analysis FREE.</p>
+        <button class="hero-btn hero-btn-primary" onclick="showPage('form')">
+          <i class="fas fa-arrow-right me-2"></i>Get Started Now
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== PAGE: SERVICES ===== -->
+  <div class="page-section" id="page-services">
+    <section class="section-padding" style="padding-top:120px;">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">Our Services</h2>
+          <p class="section-subtitle">Complete counselling support from rank to choice order</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-4 col-md-6">
+            <div class="card service-card p-4">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="service-icon eng" style="width:60px;height:60px;font-size:1.5rem;margin:0;">
+                  <i class="fas fa-cogs"></i>
+                </div>
+                <div>
+                  <h5 class="fw-bold mb-1">Engineering Counselling</h5>
+                  <small class="text-muted">JEE Main & Advanced</small>
+                </div>
+              </div>
+              <ul class="list-unstyled mb-3">
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>JoSAA Counselling Support</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>CSAB / UPTAC / State Counselling</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>College & Branch Prediction</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Choice Filling Strategy</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Document Verification Support</li>
+              </ul>
+              <button class="btn btn-primary rounded-pill w-100" onclick="showPage('form')">Get Engineering Analysis</button>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="card service-card p-4">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="service-icon med" style="width:60px;height:60px;font-size:1.5rem;margin:0;">
+                  <i class="fas fa-stethoscope"></i>
+                </div>
+                <div>
+                  <h5 class="fw-bold mb-1">Medical Counselling</h5>
+                  <small class="text-muted">NEET UG</small>
+                </div>
+              </div>
+              <ul class="list-unstyled mb-3">
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>MCC AIQ Counselling Support</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>State Quota Counselling</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>MBBS / BDS College Prediction</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Choice Filling Guidance</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Seat Allotment Strategy</li>
+              </ul>
+              <button class="btn btn-info text-white rounded-pill w-100" onclick="showPage('form')">Get Medical Analysis</button>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="card service-card p-4">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="service-icon ayu" style="width:60px;height:60px;font-size:1.5rem;margin:0;">
+                  <i class="fas fa-leaf"></i>
+                </div>
+                <div>
+                  <h5 class="fw-bold mb-1">AYUSH Counselling</h5>
+                  <small class="text-muted">BAMS / BHMS / BUMS / BSMS</small>
+                </div>
+              </div>
+              <ul class="list-unstyled mb-3">
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>AACCC Counselling Support</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>State AYUSH Counselling</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>College & Course Prediction</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Merit List Analysis</li>
+                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Seat Allotment Guidance</li>
+              </ul>
+              <button class="btn btn-success rounded-pill w-100" onclick="showPage('form')">Get AYUSH Analysis</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== PAGE: FORM ===== -->
+  <div class="page-section" id="page-form">
+    <section class="form-section section-padding" style="padding-top:120px;">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">Get Your Free Analysis</h2>
+          <p class="section-subtitle">Fill in your details and get a personalized choice filling strategy</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="form-container">
+              <form id="leadForm" onsubmit="return submitLead(event)">
+                <!-- Counselling Type -->
+                <div class="mb-4">
+                  <label class="form-label">Counselling Type <span class="text-danger">*</span></label>
+                  <select class="form-select" name="counsellingType" id="counsellingType" required onchange="toggleFormFields()">
+                    <option value="">Select Counselling Type</option>
+                    <option value="Engineering">Engineering (JEE Main / Advanced)</option>
+                    <option value="Medical">Medical (NEET UG)</option>
+                    <option value="AYUSH">AYUSH (BAMS / BHMS / BUMS / BSMS)</option>
+                  </select>
+                </div>
+
+                <div class="row g-3">
+                  <!-- Common Fields -->
+                  <div class="col-md-6">
+                    <label class="form-label">Student Name <span class="text-danger">*</span></label>
+                    <input class="form-control" name="studentName" id="studentName" placeholder="Enter student name" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Parent Name</label>
+                    <input class="form-control" name="parentName" id="parentName" placeholder="Enter parent name">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">WhatsApp Number <span class="text-danger">*</span></label>
+                    <input class="form-control" name="whatsapp" id="whatsapp" type="tel" placeholder="9876543210" required pattern="[0-9]{10,12}">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                    <input class="form-control" name="email" id="email" type="email" placeholder="email@example.com" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="category" id="category">
+                      <option value="">Select Category</option>
+                      <option value="General">General</option>
+                      <option value="OBC">OBC</option>
+                      <option value="SC">SC</option>
+                      <option value="ST">ST</option>
+                      <option value="EWS">EWS</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">State</label>
+                    <select class="form-select" name="state" id="state">
+                      <option value="">Select State</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu">Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                    </select>
+                  </div>
+
+                  <!-- Budget -->
+                  <div class="col-md-6">
+                    <label class="form-label">Budget Range</label>
+                    <select class="form-select" name="budget" id="budget">
+                      <option value="">Select Budget</option>
+                      <option value="Below 5 Lakh">Below 5 Lakh</option>
+                      <option value="5-10 Lakh">5-10 Lakh</option>
+                      <option value="10-20 Lakh">10-20 Lakh</option>
+                      <option value="20-50 Lakh">20-50 Lakh</option>
+                      <option value="50 Lakh - 1 Crore">50 Lakh - 1 Crore</option>
+                      <option value="Above 1 Crore">Above 1 Crore</option>
+                    </select>
+                  </div>
+
+                  <!-- Registration Status -->
+                  <div class="col-md-6">
+                    <label class="form-label">Registration Status</label>
+                    <select class="form-select" name="registrationStatus" id="registrationStatus">
+                      <option value="">Select Status</option>
+                      <option value="Not Registered">Not Registered</option>
+                      <option value="Registered">Registered</option>
+                      <option value="Fees Paid">Fees Paid</option>
+                      <option value="Choice Filled">Choice Filled</option>
+                    </select>
+                  </div>
+
+                  <!-- Documents Ready -->
+                  <div class="col-md-6">
+                    <label class="form-label">Documents Ready</label>
+                    <select class="form-select" name="documentsReady" id="documentsReady">
+                      <option value="">Select</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                      <option value="Partially">Partially</option>
+                    </select>
+                  </div>
+
+                  <!-- Main Problem -->
+                  <div class="col-md-6">
+                    <label class="form-label">Main Problem / Concern</label>
+                    <select class="form-select" name="mainProblem" id="mainProblem">
+                      <option value="">Select Concern</option>
+                      <option value="College Selection">College Selection</option>
+                      <option value="Branch Selection">Branch Selection</option>
+                      <option value="Fee Structure">Fee Structure</option>
+                      <option value="Documentation">Documentation</option>
+                      <option value="Counselling Process">Counselling Process</option>
+                      <option value="Seat Allotment">Seat Allotment</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Engineering Conditional Fields -->
+                <div id="engineeringFields" class="conditional-fields" style="display:none;">
+                  <hr>
+                  <h5 class="fw-bold mb-3"><i class="fas fa-cogs me-2" style="color:var(--primary);"></i>Engineering Details</h5>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">JEE Main Rank</label>
+                      <input class="form-control" name="jeeRank" id="jeeRank" type="number" placeholder="Enter JEE Main rank">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Home State</label>
+                      <select class="form-select" name="homeState" id="homeState">
+                        <option value="">Select Home State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Preferred Branch</label>
+                      <select class="form-select" name="preferredBranch" id="preferredBranch">
+                        <option value="">Select Branch</option>
+                        <option value="CSE">Computer Science (CSE)</option>
+                        <option value="ECE">Electronics & Communication (ECE)</option>
+                        <option value="EEE">Electrical & Electronics (EEE)</option>
+                        <option value="ME">Mechanical (ME)</option>
+                        <option value="CE">Civil (CE)</option>
+                        <option value="IT">Information Technology (IT)</option>
+                        <option value="AI">Artificial Intelligence & ML</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Priority</label>
+                      <select class="form-select" name="priority" id="priority">
+                        <option value="">Select Priority</option>
+                        <option value="Branch First">Branch First</option>
+                        <option value="College First">College First</option>
+                        <option value="Location First">Location First</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Risk Preference</label>
+                      <select class="form-select" name="risk" id="risk">
+                        <option value="">Select Risk Level</option>
+                        <option value="Safe">Safe</option>
+                        <option value="Balanced">Balanced</option>
+                        <option value="Aggressive">Aggressive</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Counselling Types</label>
+                      <select class="form-select" name="counselling" id="counsellingEng">
+                        <option value="">Select Counselling</option>
+                        <option value="JoSAA">JoSAA</option>
+                        <option value="CSAB">CSAB</option>
+                        <option value="UPTAC">UPTAC</option>
+                        <option value="JoSAA, CSAB">JoSAA & CSAB</option>
+                        <option value="JoSAA, CSAB, UPTAC">JoSAA, CSAB & UPTAC</option>
+                        <option value="State Counselling">State Counselling</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Medical & AYUSH Conditional Fields -->
+                <div id="medicalFields" class="conditional-fields" style="display:none;">
+                  <hr>
+                  <h5 class="fw-bold mb-3"><i class="fas fa-stethoscope me-2" style="color:var(--primary);"></i>Medical / AYUSH Details</h5>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label">NEET Score</label>
+                      <input class="form-control" name="neetScore" id="neetScore" type="number" placeholder="Enter NEET score">
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">NEET AIR</label>
+                      <input class="form-control" name="air" id="air" type="number" placeholder="Enter NEET rank">
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Preference</label>
+                      <select class="form-select" name="preference" id="preference">
+                        <option value="">Select Course</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Counselling</label>
+                      <select class="form-select" name="counselling" id="counsellingMed">
+                        <option value="">Select Counselling</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="submit-btn btn mt-4 text-white">
+                  <i class="fas fa-paper-plane me-2"></i>Submit for Free Analysis
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== PAGE: DASHBOARD ===== -->
+  <div class="page-section" id="page-dashboard">
+    <section class="section-padding" style="padding-top:120px;">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">CRM Dashboard</h2>
+          <p class="section-subtitle">Real-time lead tracking and management</p>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="row g-3 mb-4" id="dashboardStats"></div>
+
+        <!-- Lead Management -->
+        <div class="card dashboard-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <h4 class="fw-bold mb-0"><i class="fas fa-list me-2" style="color:var(--primary);"></i>All Leads</h4>
+            <div class="d-flex gap-2 flex-wrap">
+              <input class="form-control form-control-sm" style="width:200px;" type="text" id="leadSearch" placeholder="Search by name, phone, lead ID..." onkeyup="filterLeads()">
+              <select class="form-select form-select-sm" style="width:150px;" id="statusFilter" onchange="filterLeads()">
+                <option value="">All Statuses</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped table-hover lead-table mb-0">
+              <thead>
+                <tr>
+                  <th>Lead ID</th>
+                  <th>Name</th>
+                  <th>WhatsApp</th>
+                  <th>Course</th>
+                  <th>Score</th>
+                  <th>Priority</th>
+                  <th>Assigned To</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="leadsTableBody">
+                <tr><td colspan="9" class="text-center text-muted py-4">Loading leads...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== PAGE: FAQ ===== -->
+  <div class="page-section" id="page-faq">
+    <section class="faq-section section-padding" style="padding-top:120px;">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Everything you need to know about counselling</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="accordion" id="faqAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    What is choice filling in counselling?
+                  </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Choice filling is the process where students list their preferred colleges and courses during admission counselling. The order of preferences determines seat allotment based on rank, availability, and counselling rules.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                    How does GLN help in choice filling?
+                  </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    We analyze your rank, category, budget, and preferences to create a personalized choice order that maximizes your chances of getting the best possible college and branch within your profile parameters.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                    What is the cost of your services?
+                  </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Our initial analysis is completely free. We provide a detailed report and counselling strategy at no cost. Premium personalized support plans are available for those who need dedicated 1-on-1 guidance.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                    How long does it take to get my report?
+                  </button>
+                </h2>
+                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Once you submit your details, our team typically reviews and prepares your personalized report within 24-48 hours. Urgent requests may be processed faster on priority.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                    Which counselling processes do you cover?
+                  </button>
+                </h2>
+                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    We cover JoSAA, CSAB, UPTAC for Engineering; MCC AIQ and state counselling for Medical; AACCC for AYUSH. We also support various state-level counselling processes across India.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                    Do you guarantee seat allotment?
+                  </button>
+                </h2>
+                <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    While we cannot guarantee specific seat allotment (as it depends on many factors), our optimized choice filling strategy significantly improves your chances of getting a desirable college and branch within your rank range.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                    How do I contact the counselling team?
+                  </button>
+                </h2>
+                <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    You can reach us on WhatsApp at 919278110022, email at query@admissionadvice.in, or visit our website at www.admissionadvice.in. A dedicated counsellor will be assigned to you after submission.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Floating WhatsApp Button -->
+  <a class="floating-wa" href="https://wa.me/919278110022" target="_blank" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+          <p class="mb-0">&copy; 2026 GLN Admission Advice Pvt Ltd. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <a href="https://www.admissionadvice.in" class="text-white text-decoration-none me-3" target="_blank">Website</a>
+          <a href="https://youtube.com" class="text-white text-decoration-none me-3" target="_blank">YouTube</a>
+          <a href="https://wa.me/919278110022" class="text-white text-decoration-none" target="_blank">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" crossorigin="anonymous"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+  <script>
+    // ─── APP STATE ──────────────────────────────────────────────────────────
+    var currentTheme = 'light';
+    var allLeads = [];
+    var dashboardData = {};
+
+    // ─── PAGE NAVIGATION ────────────────────────────────────────────────────
+    function showPage(page) {
+      document.querySelectorAll('.page-section').forEach(function(el) { el.classList.remove('active'); });
+      var target = document.getElementById('page-' + page);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-link-custom').forEach(function(el) { el.classList.remove('active'); });
+      var navLink = document.querySelector('.nav-link-custom[data-page="' + page + '"]');
+      if (navLink) navLink.classList.add('active');
+
+      if (page === 'dashboard') loadDashboard();
+      if (page === 'home') refreshHeroStats();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      var navbarCollapse = document.getElementById('mainNav');
+      var bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+      if (bsCollapse) bsCollapse.hide();
+    }
+
+    // ─── THEME TOGGLE ───────────────────────────────────────────────────────
+    function toggleTheme() {
+      var html = document.documentElement;
+      var icon = document.getElementById('themeIcon');
+
+      if (html.getAttribute('data-bs-theme') === 'dark') {
+        html.setAttribute('data-bs-theme', 'light');
+        document.body.classList.remove('dark');
+        icon.className = 'fas fa-moon';
+        currentTheme = 'light';
+      } else {
+        html.setAttribute('data-bs-theme', 'dark');
+        document.body.classList.add('dark');
+        icon.className = 'fas fa-sun';
+        currentTheme = 'dark';
+      }
+    }
+
+    // ─── TOAST NOTIFICATIONS ────────────────────────────────────────────────
+    function showToast(message, type) {
+      type = type || 'info';
+      var container = document.getElementById('toastContainer');
+      var colors = { success: '#11998e', error: '#f5576c', info: '#4facfe' };
+      var icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+
+      var toast = document.createElement('div');
+      toast.className = 'toast-custom toast-' + type;
+      toast.style.background = colors[type] || colors.info;
+      toast.innerHTML = '<i class="fas ' + (icons[type] || icons.info) + ' fa-lg"></i><span>' + message + '</span>';
+      container.appendChild(toast);
+
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100px)';
+        toast.style.transition = 'all 0.4s';
+        setTimeout(function() { toast.remove(); }, 500);
+      }, 4000);
+    }
+
+    // ─── LOADING ────────────────────────────────────────────────────────────
+    function showLoading() {
+      document.getElementById('loadingOverlay').classList.add('active');
+    }
+
+    function hideLoading() {
+      document.getElementById('loadingOverlay').classList.remove('active');
+    }
+
+    // ─── FORM FIELD TOGGLE ──────────────────────────────────────────────────
+    function toggleFormFields() {
+      var type = document.getElementById('counsellingType').value;
+      var engFields = document.getElementById('engineeringFields');
+      var medFields = document.getElementById('medicalFields');
+      var prefSelect = document.getElementById('preference');
+      var counsellingMed = document.getElementById('counsellingMed');
+
+      engFields.style.display = 'none';
+      medFields.style.display = 'none';
+
+      if (type === 'Engineering') {
+        engFields.style.display = 'block';
+        document.getElementById('counsellingEng').name = 'counselling';
+      } else if (type === 'Medical') {
+        medFields.style.display = 'block';
+        prefSelect.innerHTML = '<option value="">Select Course</option>' +
+          '<option value="MBBS">MBBS</option>' +
+          '<option value="BDS">BDS</option>';
+        counsellingMed.innerHTML = '<option value="">Select Counselling</option>' +
+          '<option value="MCC AIQ">MCC AIQ</option>' +
+          '<option value="State Counselling">State Counselling</option>' +
+          '<option value="MCC AIQ, State">MCC AIQ & State</option>';
+        document.getElementById('counsellingMed').name = 'counselling';
+      } else if (type === 'AYUSH') {
+        medFields.style.display = 'block';
+        prefSelect.innerHTML = '<option value="">Select Course</option>' +
+          '<option value="BAMS">BAMS</option>' +
+          '<option value="BHMS">BHMS</option>' +
+          '<option value="BUMS">BUMS</option>' +
+          '<option value="BSMS">BSMS</option>';
+        counsellingMed.innerHTML = '<option value="">Select Counselling</option>' +
+          '<option value="AACCC">AACCC</option>' +
+          '<option value="State Counselling">State Counselling</option>' +
+          '<option value="AACCC, State">AACCC & State</option>';
+        document.getElementById('counsellingMed').name = 'counselling';
+      }
+    }
+
+    // ─── WEB APP URL (fetched once) ────────────────────────────────────────
+    var _webAppUrl = "https://script.google.com/macros/s/AKfycbz86m4PPkjnxRG_usvSLa1WEgRkE91JsRtCtaIkB0rMHv2t4Q7cT_sYTzcYMDjloIwCCg/exec";
+
+    function getWebAppUrl(callback) {
+      if (_webAppUrl) { callback(_webAppUrl); return; }
+      try {
+        google.script.url.getLocation(function(loc) {
+          _webAppUrl = loc.href;
+          callback(_webAppUrl);
+        });
+      } catch(e) {
+        callback(window.location.origin + window.location.pathname);
+      }
+    }
+
+    // ─── SUBMIT LEAD via doPost HTTP POST ────────────────────────────────────
+    function submitLead(event) {
+      event.preventDefault();
+      showLoading();
+
+      var form = document.getElementById('leadForm');
+      var formData = new FormData(form);
+
+      var type = formData.get('counsellingType');
+      if (type === 'Engineering') {
+        formData.set('counselling', document.getElementById('counsellingEng').value || '');
+      } else if (type === 'Medical' || type === 'AYUSH') {
+        formData.set('counselling', document.getElementById('counsellingMed').value || '');
+      }
+
+      getWebAppUrl(function(url) {
+        var params = new URLSearchParams();
+        formData.forEach(function(v, k) { params.append(k, v); });
+
+        fetch(url, { method: 'POST', body: params })
+          .then(function(resp) { return resp.json(); })
+          .then(function(result) {
+            hideLoading();
+            if (result.success) {
+              form.reset();
+              document.getElementById('engineeringFields').style.display = 'none';
+              document.getElementById('medicalFields').style.display = 'none';
+              Swal.fire({
+                icon: 'success',
+                title: 'Application Submitted!',
+                html: '<div style="text-align:left;padding:10px;">' +
+                  '<p><strong>Lead ID:</strong> ' + result.leadId + '</p>' +
+                  '<p><strong>Priority:</strong> ' + result.leadPriority + '</p>' +
+                  '<p><strong>Assigned To:</strong> ' + result.assignedTo + '</p>' +
+                  '<p style="margin-top:15px;padding:10px;background:#f0f9ff;border-radius:8px;border-left:4px solid #667eea;">' +
+                  '<i class="fas fa-info-circle me-2" style="color:#667eea;"></i>Our team will contact you shortly.</p></div>',
+                confirmButtonText: '<i class="fas fa-check me-2"></i>Great!',
+                confirmButtonColor: '#667eea',
+                backdrop: true,
+                allowOutsideClick: false
+              });
+              showToast('Lead ' + result.leadId + ' submitted! Priority: ' + result.leadPriority, 'success');
+              refreshHeroStats();
+            } else {
+              Swal.fire({ icon: 'error', title: 'Failed', text: result.message || 'Please try again.', confirmButtonColor: '#f5576c' });
+              showToast(result.message || 'Submission failed', 'error');
+            }
+          })
+          .catch(function(err) {
+            hideLoading();
+            // Fallback to google.script.run if fetch fails (CORS etc)
+            fallbackSaveLead(form, type);
+          });
+      });
+    }
+
+    // ─── FALLBACK: google.script.run if doPost fetch fails ──────────────────
+    function fallbackSaveLead(form, counsellingType) {
+      showToast('Trying alternative submission...', 'info');
+      var fd = {};
+      var inputs = form.querySelectorAll('input, select');
+      inputs.forEach(function(el) { if (el.name) fd[el.name] = el.value; });
+      if (counsellingType === 'Engineering') {
+        fd.counselling = document.getElementById('counsellingEng').value || '';
+      } else if (counsellingType === 'Medical' || counsellingType === 'AYUSH') {
+        fd.counselling = document.getElementById('counsellingMed').value || '';
+      }
+
+      var runner = safeScriptRun();
+      if (!runner) { hideLoading(); showToast('Submission failed', 'error'); return; }
+
+      runner
+        .withSuccessHandler(function(result) {
+          hideLoading();
+          if (result.success) {
+            form.reset();
+            document.getElementById('engineeringFields').style.display = 'none';
+            document.getElementById('medicalFields').style.display = 'none';
+            Swal.fire({ icon: 'success', title: 'Application Submitted!',
+              html: '<p><strong>Lead ID:</strong> ' + result.leadId + '</p><p><strong>Priority:</strong> ' + result.leadPriority + '</p>',
+              confirmButtonColor: '#667eea' });
+            showToast('Lead ' + result.leadId + ' submitted!', 'success');
+            refreshHeroStats();
+          } else {
+            Swal.fire({ icon: 'error', title: 'Failed', text: result.message, confirmButtonColor: '#f5576c' });
+          }
+        })
+        .withFailureHandler(function(err) {
+          hideLoading();
+          Swal.fire({ icon: 'error', title: 'Error', text: err.message || 'Server error' });
+        })
+        .saveLead(fd);
+    }
+
+    // ─── LOAD DASHBOARD ────────────────────────────────────────────────────
+    function loadDashboard() {
+      showLoading();
+
+      google.script.run
+        .withSuccessHandler(function(data) {
+          dashboardData = data;
+          renderDashboardCards(data);
+          hideLoading();
+        })
+        .withFailureHandler(function(err) {
+          hideLoading();
+          showToast('Failed to load dashboard', 'error');
+        })
+        .getDashboardData();
+
+      google.script.run
+        .withSuccessHandler(function(leads) {
+          allLeads = leads;
+          renderLeadsTable(leads);
+          populateStatusFilter(leads);
+        })
+        .withFailureHandler(function() {
+          document.getElementById('leadsTableBody').innerHTML =
+            '<tr><td colspan="9" class="text-center text-danger py-4">Failed to load leads</td></tr>';
+        })
+        .getAllLeads();
+    }
+
+    function renderDashboardCards(data) {
+      var container = document.getElementById('dashboardStats');
+      var cards = [
+        { label: 'Total Leads', value: data['Total Leads'] || 0, icon: 'fa-users', color: '#667eea' },
+        { label: "Today's Leads", value: data["Today's Leads"] || 0, icon: 'fa-calendar-day', color: '#4facfe' },
+        { label: 'Engineering', value: data['Engineering Leads'] || 0, icon: 'fa-cogs', color: '#667eea' },
+        { label: 'Medical', value: data['Medical Leads'] || 0, icon: 'fa-stethoscope', color: '#4facfe' },
+        { label: 'AYUSH', value: data['AYUSH Leads'] || 0, icon: 'fa-leaf', color: '#11998e' },
+        { label: 'Hot Leads', value: data['Hot Leads'] || 0, icon: 'fa-fire', color: '#f5576c' },
+        { label: 'Warm Leads', value: data['Warm Leads'] || 0, icon: 'fa-sun', color: '#f093fb' },
+        { label: 'Cold Leads', value: data['Cold Leads'] || 0, icon: 'fa-snowflake', color: '#4facfe' },
+        { label: 'Analysis Pending', value: data['Analysis Pending'] || 0, icon: 'fa-clock', color: '#ffc107' },
+        { label: 'PDF Ready', value: data['PDF Ready'] || 0, icon: 'fa-file-pdf', color: '#11998e' },
+        { label: 'PDF Sent', value: data['PDF Sent'] || 0, icon: 'fa-check-double', color: '#38ef7d' },
+        { label: 'Converted', value: data['Converted Leads'] || 0, icon: 'fa-trophy', color: '#ffd700' }
+      ];
+
+      container.innerHTML = cards.map(function(c) {
+        return '<div class="col-md-3 col-6">' +
+          '<div class="dashboard-card card p-3 h-100">' +
+          '<div class="d-flex align-items-center gap-3">' +
+          '<div class="stat-icon" style="background:' + c.color + '20;color:' + c.color + ';">' +
+          '<i class="fas ' + c.icon + '"></i></div>' +
+          '<div><div class="fw-bold" style="font-size:1.5rem;color:' + c.color + ';">' + c.value + '</div>' +
+          '<small class="text-muted">' + c.label + '</small></div></div></div></div>';
+      }).join('');
+    }
+
+    function renderLeadsTable(leads) {
+      var tbody = document.getElementById('leadsTableBody');
+
+      if (!leads || leads.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4">No leads found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = leads.map(function(lead) {
+        var priorityClass = 'bg-secondary';
+        if (lead.Lead_Priority === 'Hot Lead') priorityClass = 'badge-hot';
+        else if (lead.Lead_Priority === 'Warm Lead') priorityClass = 'badge-warm';
+        else if (lead.Lead_Priority === 'Cold Lead') priorityClass = 'badge-cold';
+
+        var scoreColor = '#f5576c';
+        if (lead.Lead_Score >= 80) scoreColor = '#11998e';
+        else if (lead.Lead_Score >= 50) scoreColor = '#f093fb';
+
+        return '<tr>' +
+          '<td><strong>' + (lead.Lead_ID || '-') + '</strong></td>' +
+          '<td>' + (lead.Student_Name || '-') + '</td>' +
+          '<td>' + (lead.WhatsApp || '-') + '</td>' +
+          '<td><span class="badge bg-primary rounded-pill">' + (lead.Course_Type || '-') + '</span></td>' +
+          '<td><div class="d-flex align-items-center gap-2"><div class="progress progress-thin flex-grow-1" style="width:60px;">' +
+          '<div class="progress-bar" style="width:' + (lead.Lead_Score || 0) + '%;background:' + scoreColor + ';"></div></div>' +
+          '<small class="fw-bold" style="color:' + scoreColor + ';">' + (lead.Lead_Score || 0) + '</small></div></td>' +
+          '<td><span class="badge ' + priorityClass + '">' + (lead.Lead_Priority || '-') + '</span></td>' +
+          '<td>' + (lead.Assigned_To || '-') + '</td>' +
+          '<td><span class="badge bg-light text-dark border">' + (lead.CRM_Status || 'New Lead') + '</span></td>' +
+          '<td><button class="btn btn-sm btn-outline-primary rounded-pill" onclick="viewLead(\'' + (lead.Lead_ID || '') + '\')">View</button></td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    function populateStatusFilter(leads) {
+      var select = document.getElementById('statusFilter');
+      var statuses = {};
+      leads.forEach(function(l) {
+        var s = l.CRM_Status || 'New Lead';
+        statuses[s] = true;
+      });
+
+      var options = '<option value="">All Statuses</option>';
+      Object.keys(statuses).sort().forEach(function(s) {
+        options += '<option value="' + s + '">' + s + '</option>';
+      });
+      select.innerHTML = options;
+    }
+
+    function filterLeads() {
+      var search = document.getElementById('leadSearch').value.toLowerCase();
+      var status = document.getElementById('statusFilter').value;
+
+      var filtered = allLeads.filter(function(lead) {
+        var matchSearch = !search ||
+          (lead.Lead_ID && lead.Lead_ID.toLowerCase().indexOf(search) !== -1) ||
+          (lead.Student_Name && lead.Student_Name.toLowerCase().indexOf(search) !== -1) ||
+          (lead.WhatsApp && lead.WhatsApp.indexOf(search) !== -1);
+        var matchStatus = !status || (lead.CRM_Status || 'New Lead') === status;
+        return matchSearch && matchStatus;
+      });
+
+      renderLeadsTable(filtered);
+    }
+
+    // ─── VIEW LEAD ─────────────────────────────────────────────────────────
+    function viewLead(leadId) {
+      if (!leadId) return;
+      showLoading();
+
+      google.script.run
+        .withSuccessHandler(function(lead) {
+          hideLoading();
+          if (!lead) {
+            showToast('Lead not found', 'error');
+            return;
+          }
+
+          var priorityClass = 'bg-secondary';
+          if (lead.Lead_Priority === 'Hot Lead') priorityClass = 'badge-hot';
+          else if (lead.Lead_Priority === 'Warm Lead') priorityClass = 'badge-warm';
+          else if (lead.Lead_Priority === 'Cold Lead') priorityClass = 'badge-cold';
+
+          var fields = [
+            { label: 'Lead ID', value: lead.Lead_ID },
+            { label: 'Student Name', value: lead.Student_Name },
+            { label: 'Parent Name', value: lead.Parent_Name || '-' },
+            { label: 'WhatsApp', value: lead.WhatsApp },
+            { label: 'Email', value: lead.Email },
+            { label: 'Course Type', value: lead.Course_Type },
+            { label: 'Category', value: lead.Category || '-' },
+            { label: 'State', value: lead.State || '-' },
+            { label: 'Budget', value: lead.Budget || '-' },
+            { label: 'Counselling', value: lead.Counselling || '-' },
+            { label: 'Registration', value: lead.Registration_Status || '-' },
+            { label: 'Documents', value: lead.Documents_Ready || '-' },
+            { label: 'Lead Score', value: lead.Lead_Score + '/100' },
+            { label: 'Priority', value: lead.Lead_Priority },
+            { label: 'Assigned To', value: lead.Assigned_To },
+            { label: 'Status', value: lead.CRM_Status },
+            { label: 'Created', value: lead.Created_At ? new Date(lead.Created_At).toLocaleString() : '-' }
+          ];
+
+          if (lead.Course_Type === 'Engineering') {
+            fields.push({ label: 'JEE Rank', value: lead.JEE_Main_Rank || '-' });
+            fields.push({ label: 'Home State', value: lead.Home_State || '-' });
+            fields.push({ label: 'Branch', value: lead.Preferred_Branch || '-' });
+            fields.push({ label: 'Priority', value: lead.Priority_Rank || '-' });
+            fields.push({ label: 'Risk', value: lead.Risk || '-' });
+          } else if (lead.Course_Type === 'Medical' || lead.Course_Type === 'AYUSH') {
+            fields.push({ label: 'NEET Score', value: lead.NEET_Score || '-' });
+            fields.push({ label: 'AIR', value: lead.AIR || '-' });
+            fields.push({ label: 'Preference', value: lead.Preference || '-' });
+          }
+
+          var html = '<div style="text-align:left;">' +
+            '<div class="text-center mb-3"><span class="badge ' + priorityClass + ' fs-6 px-4 py-2">' + lead.Lead_Priority + '</span></div>' +
+            '<table class="table table-sm table-borderless">';
+
+          fields.forEach(function(f) {
+            html += '<tr><td style="padding:6px 10px;font-weight:600;color:#666;width:120px;">' + f.label + '</td>' +
+              '<td style="padding:6px 10px;">' + f.value + '</td></tr>';
+          });
+
+          html += '</table></div>';
+
+          Swal.fire({
+            title: 'Lead Details',
+            html: html,
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Update Status',
+            cancelButtonText: 'Close',
+            confirmButtonColor: '#667eea',
+            cancelButtonColor: '#6c757d'
+          }).then(function(result) {
+            if (result.isConfirmed) {
+              updateLeadStatus(lead.Lead_ID, lead.CRM_Status);
+            }
+          });
+
+        })
+        .withFailureHandler(function(err) {
+          hideLoading();
+          showToast('Failed to load lead details', 'error');
+        })
+        .getLeadById(leadId);
+    }
+
+    // ─── UPDATE LEAD STATUS ─────────────────────────────────────────────────
+    function updateLeadStatus(leadId, currentStatus) {
+      google.script.run
+        .withSuccessHandler(function(statuses) {
+          var optionsHtml = statuses.map(function(s) {
+            var selected = s === currentStatus ? 'selected' : '';
+            return '<option value="' + s + '" ' + selected + '>' + s + '</option>';
+          }).join('');
+
+          Swal.fire({
+            title: 'Update CRM Status',
+            html: '<div style="text-align:left;">' +
+              '<label class="form-label fw-bold">New Status:</label>' +
+              '<select class="form-select" id="crmStatusSelect">' +
+              optionsHtml + '</select></div>',
+            confirmButtonText: 'Update',
+            confirmButtonColor: '#667eea',
+            showCancelButton: true,
+            cancelButtonText: 'Cancel',
+            preConfirm: function() {
+              return document.getElementById('crmStatusSelect').value;
+            }
+          }).then(function(result) {
+            if (result.isConfirmed && result.value && result.value !== currentStatus) {
+              showLoading();
+              google.script.run
+                .withSuccessHandler(function(res) {
+                  hideLoading();
+                  if (res.success) {
+                    showToast('Status updated successfully!', 'success');
+                    loadDashboard();
+                  } else {
+                    showToast('Failed to update status', 'error');
+                  }
+                })
+                .withFailureHandler(function() { hideLoading(); showToast('Error updating status', 'error'); })
+                .updateCRMStatus(leadId, result.value);
+            }
+          });
+        })
+        .withFailureHandler(function() { showToast('Failed to load statuses', 'error'); })
+        .getCRMStatuses();
+    }
+
+    // ─── SAFE GOOGLE SCRIPT RUN ─────────────────────────────────────────────
+    function safeScriptRun() {
+      if (typeof google !== 'undefined' && google && google.script) {
+        return google.script.run;
+      }
+      return null;
+    }
+
+    // ─── REFRESH HERO STATS ─────────────────────────────────────────────────
+    function refreshHeroStats() {
+      var runner = safeScriptRun();
+      if (!runner) return;
+
+      try {
+        runner
+          .withSuccessHandler(function(data) {
+            if (!data) return;
+            var el = function(id) { return document.getElementById(id); };
+            if (el('totalLeadsHero')) el('totalLeadsHero').textContent = data['Total Leads'] || '0';
+            if (el('hotLeadsHero')) el('hotLeadsHero').textContent = data['Hot Leads'] || '0';
+            if (el('statTotalLeads')) el('statTotalLeads').textContent = data['Total Leads'] || '0';
+            if (el('statTodayLeads')) el('statTodayLeads').textContent = data["Today's Leads"] || '0';
+            if (el('statHotLeads')) el('statHotLeads').textContent = data['Hot Leads'] || '0';
+            if (el('statConverted')) el('statConverted').textContent = data['Converted Leads'] || '0';
+          })
+          .withFailureHandler(function() {})
+          .getDashboardData();
+      } catch(e) {}
+    }
+
+    // ─── NAVBAR SCROLL EFFECT ───────────────────────────────────────────────
+    window.addEventListener('scroll', function() {
+      var nav = document.getElementById('mainNavbar');
+      if (nav) {
+        if (window.scrollY > 50) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      }
+    });
+
+    // ─── HIDE FALLBACK ON SUCCESS ───────────────────────────────────────────
+    function hideFallback() {
+      var fb = document.getElementById('app-fallback');
+      if (fb) fb.style.display = 'none';
+    }
+
+    // ─── INIT ───────────────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        hideFallback();
+        refreshHeroStats();
+        toggleFormFields();
+      } catch(e) {
+        console.warn('Init error:', e);
+      }
+    });
+  </script>
+</body>
+</html>
